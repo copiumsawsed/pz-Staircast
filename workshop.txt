@@ -12,4 +12,4 @@ description=
 description=[h2]Source[/h2]
 description=[url=https://github.com/copiumsawsed/pz-Staircast]View GitHuh[/url]
 tags=Build 42;Balance;Realistic;QoL
-visibility=unlisted
+visibility=public
