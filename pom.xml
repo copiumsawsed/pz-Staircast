@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <name>Staircast</name>
+    <groupId>pzmod.staircast</groupId>
+    <artifactId>staircast</artifactId>
+    <version>1.0.0</version>
+
+    <properties>
+        <maven.compiler.release>17</maven.compiler.release>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <pz.version>[42.13,)</pz.version>
+        <pz.modfolder>42.13</pz.modfolder>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>projectzomboid</groupId>
+            <artifactId>projectzomboid</artifactId>
+            <version>${pz.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>me.zed_0xff</groupId>
+            <artifactId>zombie_buddy</artifactId>
+            <version>[1.6.4,)</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <profiles>
+        <profile>
+            <id>b42.13</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <pz.version>[42.13,)</pz.version>
+                <pz.modfolder>42.13</pz.modfolder>
+            </properties>
+        </profile>
+    </profiles>
+
+    <build>
+        <finalName>${project.artifactId}</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.4.1</version>
+                <configuration>
+                    <outputDirectory>Contents/mods/${project.name}/${pz.modfolder}/media/java/client</outputDirectory>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

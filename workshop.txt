@@ -1,0 +1,15 @@
+version=1
+id=3684713089
+title=Staircast
+description=Lets you see upstairs in a normal way.
+description=
+description=Compatible game version: 42.13+
+description=
+description=[h2]Installation[/h2]
+description=Subscribe and make sure you have [url=https://steamcommunity.com/workshop/filedetails/?id=3619862853]ZombieBuddy[/url] installed properly.
+description=
+description=
+description=[h2]Source[/h2]
+description=[url=https://github.com/copiumsawsed/pz-Staircast]View GitHuh[/url]
+tags=Build 42;Balance;Realistic;QoL
+visibility=unlisted
