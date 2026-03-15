@@ -6,7 +6,6 @@ poster=../common/staircast_poster.png
 icon=../common/staircast_icon.png
 url=https://steamcommunity.com/sharedfiles/filedetails/?id=3684713089
 category=features
-tags=Build 42
 require=\ZombieBuddy
 modversion=1.0.0
 versionMin=42.13

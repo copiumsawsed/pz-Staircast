@@ -8,8 +8,7 @@ description=
 description=[h2]Installation[/h2]
 description=Subscribe and make sure you have [url=https://steamcommunity.com/workshop/filedetails/?id=3619862853]ZombieBuddy[/url] installed properly.
 description=
-description=
-description=[h2]Source[/h2]
+description=[h2]Source code[/h2]
 description=[url=https://github.com/copiumsawsed/pz-Staircast]View GitHuh[/url]
 tags=Build 42;Balance;Realistic;QoL
 visibility=public
