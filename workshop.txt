@@ -3,10 +3,28 @@ id=3684713089
 title=Staircast
 description=Lets you see upstairs in a normal way.
 description=
-description=Compatible game version: 42.13+
+description=Compatible game versions: [b]42.13 and above[/b]
 description=
 description=[h2]Installation[/h2]
 description=Subscribe and make sure you have [url=https://steamcommunity.com/workshop/filedetails/?id=3619862853]ZombieBuddy[/url] installed properly.
+description=
+description=[h2]Q/A[/h2]
+description=[h3]Is this mod safe?[/h3]
+description=This is a Java mod. Java mods can do basically anything and have access to your operating system. I have to say this mod is safe as it only performs its intended function, but you decide for yourself.
+description=[h3]I don't trust it, what now?[/h3]
+description=If you can understand the code, there is an option to build the mod from source. See below.
+description=[h3]Build 41 support?[/h3]
+description=Not supported. Rendering in this version is different, porting the mod to it essentially means creating it from scratch. I have no such plans.
+description=[h3]Multiplayer support?[/h3]
+description=Yes. [url=https://steamcommunity.com/workshop/filedetails/?id=3619862853]ZombieBuddy[/url] must be installed manually before you join a server.
+description=[h3]Is it safe to add to/remove from an existing save?[/h3]
+description=Yes, it's totally safe.
+description=[h3]Does it work on my game version?[/h3]
+description=Any game version [b]starting from 42.13[/b] is supported. Including [b]42.14[/b], [b]42.15[/b], etc.
+description=[h3]It doesn't work on my game version that is supported![/h3]
+description=This is most likely because [url=https://steamcommunity.com/workshop/filedetails/?id=3619862853]ZombieBuddy[/url] is not installed correctly/not working. Installation requires manual steps, please follow its instructions carefully. Another reason might be that you didn't enable the mod for your save. If that's not the case for you, please report it.
+description=[h3]Mod does work!!![/h3]
+description=Enjoy!
 description=
 description=[h2]Source code[/h2]
 description=[url=https://github.com/copiumsawsed/pz-Staircast]View GitHuh[/url]
