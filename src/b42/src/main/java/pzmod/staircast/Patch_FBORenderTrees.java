@@ -15,11 +15,13 @@ public class Patch_FBORenderTrees {
                 @Patch.Local("backupPos") Vector3 backupPos,
                 @Patch.Local("backupSquare") IsoGridSquare backupSquare)
         {
+            Mod.instance.trace("FBORenderTrees::init");
+
             var fs = IsoCamera.frameState;
             if (FakeFrameState.isRendering(fs.playerIndex)) {
                 var ffs = FakeFrameState.get(fs.playerIndex);
-                backupPos = new Vector3(fs.camCharacterX, fs.camCharacterY, fs.camCharacterZ);
-                backupSquare = fs.camCharacterSquare;
+                backupPos = Game.getCamCharPos(fs);
+                backupSquare = Game.getCamCharSquare(fs);
                 FakeFrameState.apply(fs, ffs.realPos, ffs.realSquare);
             }
         }

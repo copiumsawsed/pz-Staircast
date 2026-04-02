@@ -20,6 +20,15 @@ Then from the source root:
 ```sh
 mvn package
 ```
+### Build 41
+Before installing artifacts, generate the jar from your game directory:
+```sh
+jar cf projectzomboid.jar -C . astar -C . com -C . de -C . fmod -C . javax -C . N3D -C . org -C . se -C . zombie
+```
+Then install it as usual and build with the `b41` profile:
+```sh
+mvn package -P b41
+```
 
 ## License
 [MIT](LICENSE)

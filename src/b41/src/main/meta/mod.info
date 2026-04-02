@@ -1,0 +1,12 @@
+id=Staircast
+name=Staircast
+description=Lets you see upstairs in a normal way.
+author=copiumsawsed
+poster=common/staircast_poster.png
+icon=common/staircast_icon.png
+category=features
+require=ZombieBuddy
+modversion=${project.version}
+versionMin=41.0
+javaJarFile=media/java/client/${project.build.finalName}.jar
+javaPkgName=pzmod.staircast

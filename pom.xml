@@ -3,26 +3,38 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    <packaging>pom</packaging>
 
-    <name>Staircast</name>
     <groupId>pzmod.staircast</groupId>
     <artifactId>staircast</artifactId>
     <version>1.0.0</version>
+    <name>Staircast</name>
+
+    <profiles>
+        <profile>
+            <id>b41</id>
+            <modules>
+                <module>src/b41</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>b42</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <modules>
+                <module>src/b42</module>
+            </modules>
+        </profile>
+    </profiles>
 
     <properties>
         <maven.compiler.release>17</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <pz.version>[42.13,)</pz.version>
-        <pz.modfolder>42.13</pz.modfolder>
+        <mod.outputDirectory>${project.parent.basedir}/Contents/mods/${project.parent.name}/${pz.modfolder}</mod.outputDirectory>
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>projectzomboid</groupId>
-            <artifactId>projectzomboid</artifactId>
-            <version>${pz.version}</version>
-            <scope>provided</scope>
-        </dependency>
         <dependency>
             <groupId>me.zed_0xff</groupId>
             <artifactId>zombie_buddy</artifactId>
@@ -31,29 +43,60 @@
         </dependency>
     </dependencies>
 
-    <profiles>
-        <profile>
-            <id>b42.13</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <properties>
-                <pz.version>[42.13,)</pz.version>
-                <pz.modfolder>42.13</pz.modfolder>
-            </properties>
-        </profile>
-    </profiles>
-
     <build>
-        <finalName>${project.artifactId}</finalName>
+        <finalName>${project.parent.artifactId}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.4.1</version>
                 <configuration>
-                    <outputDirectory>Contents/mods/${project.name}/${pz.modfolder}/media/java/client</outputDirectory>
+                    <archive>
+                        <addMavenDescriptor>false</addMavenDescriptor>
+                    </archive>
+                    <outputDirectory>${mod.outputDirectory}/media/java/client</outputDirectory>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>3.6.1</version>
+                <executions>
+                    <execution>
+                        <id>add-shared-sources</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>../core/src/main/java</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.4.0</version>
+                <executions>
+                    <execution>
+                        <id>filter-config</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${mod.outputDirectory}</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/meta</directory>
+                                    <filtering>true</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

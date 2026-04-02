@@ -3,7 +3,6 @@ package pzmod.staircast;
 import me.zed_0xff.zombie_buddy.Patch;
 import zombie.characters.IsoPlayer;
 import zombie.iso.Vector3;
-import zombie.network.GameClient;
 
 public class Patch_LightingJNI {
     @Patch(className = "zombie.iso.LightingJNI", methodName = "checkPlayerTorches")
@@ -14,8 +13,10 @@ public class Patch_LightingJNI {
                 @Patch.Argument(0) IsoPlayer player,
                 @Patch.Argument(1) int playerIndex)
         {
+            Mod.instance.trace("LightingJNI::checkPlayerTorches");
+
             int playerIdx = playerIndex;
-            if (GameClient.client) {
+            if (Game.isClient()) {
                 if (player != IsoPlayer.getInstance()) {
                     return;
                 }
@@ -43,6 +44,8 @@ public class Patch_LightingJNI {
     public static class Patch_updatePlayer {
         @Patch.OnEnter
         public static void enter(@Patch.Local("backupPos") Vector3 backupPos, @Patch.Argument(0) int playerIndex) {
+            Mod.instance.trace("LightingJNI::updatePlayer");
+
             var player = IsoPlayer.players[playerIndex];
             if (player != null && FakeFrameState.isRendering(playerIndex)) {
                 var ffs = FakeFrameState.get(playerIndex);

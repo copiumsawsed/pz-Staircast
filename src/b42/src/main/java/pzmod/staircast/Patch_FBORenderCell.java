@@ -13,12 +13,15 @@ public class Patch_FBORenderCell {
     public static class Patch_renderInternal {
         @Patch.OnEnter
         public static void enter(@Patch.This FBORenderCell self) {
+            Mod.instance.trace("FBORenderCell::renderInternal");
+
             var fs = IsoCamera.frameState;
             int playerIndex = fs.playerIndex;
             if (FakeFrameState.isRendering(playerIndex)) {
                 var ffs = FakeFrameState.get(playerIndex);
+                ffs.isFakeSquareExterior = FakeFrameState.apply(ffs.fakeSquare, ffs.floorSquare);
                 FakeFrameState.apply(fs, ffs.fakePos, ffs.fakeSquare);
-                FakeFrameState.apply(fs.camCharacter, ffs.fakePos, ffs.fakeSquare);
+                FakeFrameState.apply(Game.getCamChar(fs), ffs.fakePos, ffs.fakeSquare);
             }
         }
     }
@@ -27,12 +30,18 @@ public class Patch_FBORenderCell {
     public static class Patch_renderTilesInternal {
         @Patch.OnExit
         public static void exit() {
+            Mod.instance.trace("FBORenderCell::renderTilesInternal exit");
+
             int playerIndex = IsoCamera.frameState.playerIndex;
             var fs = IsoCamera.frameState;
             if (FakeFrameState.isRendering(playerIndex)) {
                 var ffs = FakeFrameState.get(playerIndex);
+                if (ffs.isFakeSquareExterior != null) {
+                    FakeFrameState.reset(ffs.fakeSquare, ffs.isFakeSquareExterior);
+                    ffs.isFakeSquareExterior = null;
+                }
                 FakeFrameState.apply(fs, ffs.realPos, ffs.realSquare);
-                FakeFrameState.apply(fs.camCharacter, ffs.realPos, ffs.realSquare);
+                FakeFrameState.apply(Game.getCamChar(fs), ffs.realPos, ffs.realSquare);
             }
         }
     }
@@ -45,8 +54,14 @@ public class Patch_FBORenderCell {
                 @Patch.Local("backupSquare") IsoGridSquare backupSquare,
                 @Patch.Argument(0) int playerIndex)
         {
+            Mod.instance.trace("FBORenderCell::renderPlayers");
+
+            if (!Mod.instance.debugOptions.renderPlayer.getValue()) {
+                return;
+            }
+
             var fs = IsoCamera.frameState;
-            var camChar = fs.camCharacter;
+            var camChar = Game.getCamChar(fs);
             if (FakeFrameState.isRendering(playerIndex)) {
                 var ffs = FakeFrameState.get(playerIndex);
                 backupPos = camChar.getPosition(new Vector3());
@@ -68,6 +83,8 @@ public class Patch_FBORenderCell {
     public static class Patch_isPotentiallyObscuringObject {
         @Patch.OnEnter(skipOn = true)
         public static boolean enter(@Patch.Argument(0) IsoObject object) {
+            Mod.instance.trace("FBORenderCell::isPotentiallyObscuringObject");
+
             var playerIndex = IsoCamera.frameState.playerIndex;
             return object != null
                    && FakeFrameState.isRendering(playerIndex)
