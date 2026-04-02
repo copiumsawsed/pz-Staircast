@@ -15,17 +15,21 @@ public class Patch_WeatherFxMask {
                 @Patch.Local("backupSquare") IsoGridSquare backupSquare,
                 @Patch.Local("fakeSquareExterior") Boolean fakeSquareExterior)
         {
-            Mod.instance.trace("WeatherFxMask::initMask");
+            try {
+                Mod.instance.trace("WeatherFxMask::initMask");
 
-            var fs = IsoCamera.frameState;
-            int playerIndex = fs.playerIndex;
-            var ffs = FakeFrameState.get(playerIndex);
-            if (FakeFrameState.isRendering(playerIndex)) {
-                var camChar = Game.getCamChar(fs);
-                backupPos = camChar.getPosition(new Vector3());
-                backupSquare = camChar.getCurrentSquare();
-                fakeSquareExterior = FakeFrameState.apply(ffs.fakeSquare, ffs.floorSquare);
-                FakeFrameState.apply(camChar, ffs.fakePos, ffs.fakeSquare);
+                var fs = IsoCamera.frameState;
+                int playerIndex = fs.playerIndex;
+                var ffs = FakeFrameState.get(playerIndex);
+                if (FakeFrameState.isRendering(playerIndex)) {
+                    var camChar = Game.getCamChar(fs);
+                    backupPos = camChar.getPosition(new Vector3());
+                    backupSquare = camChar.getCurrentSquare();
+                    fakeSquareExterior = FakeFrameState.apply(ffs.fakeSquare, ffs.floorSquare);
+                    FakeFrameState.apply(camChar, ffs.fakePos, ffs.fakeSquare);
+                }
+            } catch (Throwable t) {
+                FakeFrameState.recoverFromError(t);
             }
         }
 
@@ -36,10 +40,14 @@ public class Patch_WeatherFxMask {
                 @Patch.Local("fakeSquareExterior") Boolean fakeSquareExterior)
         {
             if (backupPos != null) {
-                FakeFrameState.apply(Game.getCamChar(IsoCamera.frameState), backupPos, backupSquare);
-                if (fakeSquareExterior != null) {
-                    var ffs = FakeFrameState.get(IsoCamera.frameState.playerIndex);
-                    FakeFrameState.reset(ffs.fakeSquare, fakeSquareExterior);
+                try {
+                    FakeFrameState.apply(Game.getCamChar(IsoCamera.frameState), backupPos, backupSquare);
+                    if (fakeSquareExterior != null) {
+                        var ffs = FakeFrameState.get(IsoCamera.frameState.playerIndex);
+                        FakeFrameState.reset(ffs.fakeSquare, fakeSquareExterior);
+                    }
+                } catch (Throwable t) {
+                    FakeFrameState.recoverFromError(t);
                 }
             }
         }
@@ -54,16 +62,23 @@ public class Patch_WeatherFxMask {
                 @Patch.Local("fakeSquareExterior") Boolean fakeSquareExterior,
                 @Patch.Argument(0) int playerIndex)
         {
-            Mod.instance.trace("WeatherFxMask::renderFxMask");
+            try {
+                Mod.instance.trace("WeatherFxMask::renderFxMask");
 
-            var ffs = FakeFrameState.get(playerIndex);
-            if (FakeFrameState.isRendering(playerIndex)) {
-                var player = IsoPlayer.players[playerIndex];
-                backupPos = player.getPosition(new Vector3());
-                backupSquare = player.getCurrentSquare();
-                fakeSquareExterior = FakeFrameState.apply(ffs.fakeSquare, ffs.floorSquare);
-                FakeFrameState.apply(ffs.fakeSquare, ffs.realSquare);
-                FakeFrameState.apply(player, ffs.fakePos, ffs.fakeSquare);
+                var ffs = FakeFrameState.get(playerIndex);
+                if (FakeFrameState.isRendering(playerIndex)) {
+                    var player = IsoPlayer.players[playerIndex];
+                    backupPos = player.getPosition(new Vector3());
+                    backupSquare = player.getCurrentSquare();
+                    fakeSquareExterior = FakeFrameState.apply(ffs.fakeSquare, ffs.floorSquare);
+                    FakeFrameState.apply(ffs.fakeSquare, ffs.realSquare);
+                    FakeFrameState.apply(player, ffs.fakePos, ffs.fakeSquare);
+                    if (Mod.instance.debugOptions.testGracefulFailure.getValue()) {
+                        throw new RuntimeException("StaircastGracefulFailure");
+                    }
+                }
+            } catch (Throwable t) {
+                FakeFrameState.recoverFromError(t);
             }
         }
 
@@ -75,11 +90,15 @@ public class Patch_WeatherFxMask {
                 @Patch.Argument(0) int playerIndex)
         {
             if (backupPos != null) {
-                if (fakeSquareExterior != null) {
-                    var ffs = FakeFrameState.get(playerIndex);
-                    FakeFrameState.reset(ffs.fakeSquare, fakeSquareExterior);
+                try {
+                    if (fakeSquareExterior != null) {
+                        var ffs = FakeFrameState.get(playerIndex);
+                        FakeFrameState.reset(ffs.fakeSquare, fakeSquareExterior);
+                    }
+                    FakeFrameState.apply(IsoPlayer.players[playerIndex], backupPos, backupSquare);
+                } catch (Throwable t) {
+                    FakeFrameState.recoverFromError(t);
                 }
-                FakeFrameState.apply(IsoPlayer.players[playerIndex], backupPos, backupSquare);
             }
         }
     }

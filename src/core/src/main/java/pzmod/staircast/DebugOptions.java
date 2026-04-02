@@ -15,6 +15,7 @@ public class DebugOptions {
     public final BooleanDebugOption useSquarePos = debugOption("UseSquarePosition", false);
     public final BooleanDebugOption useFloorSquare = debugOption("UseFloorSquare", false);
     public final BooleanDebugOption assignRoomPermanently = debugOption("AssignRoomPermanently", true);
+    public final BooleanDebugOption testGracefulFailure = debugOption("TestGracefulFailure", false);
 
     private BooleanDebugOption debugOption(String name, boolean defaultValue) {
         return Game.newDebugOnlyOption(group, name, defaultValue);

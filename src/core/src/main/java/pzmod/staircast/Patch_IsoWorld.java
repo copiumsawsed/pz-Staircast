@@ -170,6 +170,7 @@ public class Patch_IsoWorld {
                     LineDrawer.DrawIsoCircle(ffs.fakePos.x, ffs.fakePos.y, ffs.fakePos.z, 0.3f, 12, 0f, 1f, 0f, 1f);
                 }
 
+                // Update this last in case of an exception.
                 ffs.frameCounter = fs.frameCount;
             }
         }

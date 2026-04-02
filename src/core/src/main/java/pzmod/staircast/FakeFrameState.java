@@ -73,4 +73,33 @@ public class FakeFrameState {
             Game.setSquareProperty(square, IsoFlagType.exterior, true);
         }
     }
+
+    public static void recoverFromError(Throwable t) {
+        if (t != null) {
+            t.printStackTrace();
+        }
+        try {
+            var fs = IsoCamera.frameState;
+            var playerIndex = fs.playerIndex;
+            var camChar = Game.getCamChar(fs);
+            if (isRendering(playerIndex)) {
+                var ffs = get(playerIndex);
+                if (camChar != null) {
+                    apply(camChar, ffs.realPos, ffs.realSquare);
+                    Game.setLastPos(camChar, ffs.realPos.x, ffs.realPos.y, ffs.realPos.z);
+                }
+                apply(fs, ffs.realPos, ffs.realSquare);
+                if (ffs.fakeSquare != null && ffs.isFakeSquareExterior != null) {
+                    reset(ffs.fakeSquare, ffs.isFakeSquareExterior);
+                    ffs.isFakeSquareExterior = null;
+                }
+            }
+        }
+        catch (Throwable tt) {
+            System.err.println("Staircast: failed to recover from error");
+            tt.printStackTrace();
+        }
+        Mod.instance.debugOptions.enable.setValue(false);
+        DebugLog.log(DebugType.Mod, "Staircast: mod disabled due to an error");
+    }
 }

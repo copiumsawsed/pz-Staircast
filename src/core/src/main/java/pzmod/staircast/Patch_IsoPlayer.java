@@ -18,31 +18,39 @@ public class Patch_IsoPlayer {
                 @Patch.Argument(value = 1, readOnly = false) float y,
                 @Patch.Argument(value = 2, readOnly = false) float z)
         {
-            Mod.instance.trace("IsoPlayer::render");
+            try {
+                Mod.instance.trace("IsoPlayer::render");
 
-            if (Game.isFboChunkRenderEnabled() || !Mod.instance.debugOptions.renderPlayer.getValue()) {
-                return;
-            }
-
-            var fs = IsoCamera.frameState;
-            var camChar = Game.getCamChar(fs);
-            if (FakeFrameState.isRendering(fs.playerIndex)) {
-                var ffs = FakeFrameState.get(fs.playerIndex);
-                if (self == camChar) {
-                    backupPos = camChar.getPosition(new Vector3());
-                    backupSquare = camChar.getCurrentSquare();
-                    FakeFrameState.apply(camChar, ffs.realPos, ffs.realSquare);
-                    x = ffs.realPos.x;
-                    y = ffs.realPos.y;
-                    z = ffs.realPos.z;
+                if (Game.isFboChunkRenderEnabled() || !Mod.instance.debugOptions.renderPlayer.getValue()) {
+                    return;
                 }
+
+                var fs = IsoCamera.frameState;
+                var camChar = Game.getCamChar(fs);
+                if (FakeFrameState.isRendering(fs.playerIndex)) {
+                    var ffs = FakeFrameState.get(fs.playerIndex);
+                    if (self == camChar) {
+                        backupPos = camChar.getPosition(new Vector3());
+                        backupSquare = camChar.getCurrentSquare();
+                        FakeFrameState.apply(camChar, ffs.realPos, ffs.realSquare);
+                        x = ffs.realPos.x;
+                        y = ffs.realPos.y;
+                        z = ffs.realPos.z;
+                    }
+                }
+            } catch (Throwable t) {
+                FakeFrameState.recoverFromError(t);
             }
         }
 
         @Patch.OnExit
         public static void exit(@Patch.Local("backupPos") Vector3 backupPos, @Patch.Local("backupSquare") IsoGridSquare backupSquare) {
             if (backupPos != null) {
-                FakeFrameState.apply(Game.getCamChar(IsoCamera.frameState), backupPos, backupSquare);
+                try {
+                    FakeFrameState.apply(Game.getCamChar(IsoCamera.frameState), backupPos, backupSquare);
+                } catch (Throwable t) {
+                    FakeFrameState.recoverFromError(t);
+                }
             }
         }
     }

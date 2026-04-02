@@ -15,21 +15,29 @@ public class Patch_FBORenderTrees {
                 @Patch.Local("backupPos") Vector3 backupPos,
                 @Patch.Local("backupSquare") IsoGridSquare backupSquare)
         {
-            Mod.instance.trace("FBORenderTrees::init");
+            try {
+                Mod.instance.trace("FBORenderTrees::init");
 
-            var fs = IsoCamera.frameState;
-            if (FakeFrameState.isRendering(fs.playerIndex)) {
-                var ffs = FakeFrameState.get(fs.playerIndex);
-                backupPos = Game.getCamCharPos(fs);
-                backupSquare = Game.getCamCharSquare(fs);
-                FakeFrameState.apply(fs, ffs.realPos, ffs.realSquare);
+                var fs = IsoCamera.frameState;
+                if (FakeFrameState.isRendering(fs.playerIndex)) {
+                    var ffs = FakeFrameState.get(fs.playerIndex);
+                    backupPos = Game.getCamCharPos(fs);
+                    backupSquare = Game.getCamCharSquare(fs);
+                    FakeFrameState.apply(fs, ffs.realPos, ffs.realSquare);
+                }
+            } catch (Throwable t) {
+                FakeFrameState.recoverFromError(t);
             }
         }
 
         @Patch.OnExit
         public static void exit(@Patch.Local("backupPos") Vector3 backupPos, @Patch.Local("backupSquare") IsoGridSquare backupSquare) {
             if (backupPos != null) {
-                FakeFrameState.apply(IsoCamera.frameState, backupPos, backupSquare);
+                try {
+                    FakeFrameState.apply(IsoCamera.frameState, backupPos, backupSquare);
+                } catch (Throwable t) {
+                    FakeFrameState.recoverFromError(t);
+                }
             }
         }
     }
