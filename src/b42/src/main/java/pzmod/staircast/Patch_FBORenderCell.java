@@ -104,6 +104,7 @@ public class Patch_FBORenderCell {
 
                 var playerIndex = IsoCamera.frameState.playerIndex;
                 return object != null
+                       && object.getSprite() != null
                        && FakeFrameState.isRendering(playerIndex)
                        && FakeFrameState.get(playerIndex).fakeSquare.z == object.square.z;
             } catch (Throwable t) {
